@@ -1,0 +1,2 @@
+# The locked setup path is `bash setup/setup.sh`; this supports pip installs.
+-e .

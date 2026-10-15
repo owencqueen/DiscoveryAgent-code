@@ -1,0 +1,55 @@
+[project]
+name = "DiscoveryAgent"
+version = "0.1.0"
+description = "DiscoveryAgent research workflow and tool agents"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "anthropic>=0.79.0",
+    "claude-agent-sdk>=0.2.101",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.0",
+    "requests>=2.32.0",
+    "termcolor>=2.0.0",
+    "pypdf>=6.0.0",
+]
+
+[project.optional-dependencies]
+# Census/PUMS/IPUMS helper for the economics agent.
+acs = [
+    "aiohttp>=3.9.0",
+    "aiolimiter>=1.1.0",
+    "diskcache>=5.6.0",
+    "ipumspy>=0.7.0",
+    "pandas>=2.1.0",
+    "rich>=13.7.0",
+    "tenacity>=8.2.0",
+    "tqdm>=4.66.0",
+]
+# Open Targets helper for the functional-genomics agent.
+opentargets = ["pyarrow>=14.0.0"]
+# Common scientific packages for code written by the execution agent.
+analysis = [
+    "numpy>=1.26.0",
+    "pandas>=2.2.0",
+    "scipy>=1.10.0",
+    "scikit-learn>=1.3.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "statsmodels>=0.14.0",
+    "lightgbm>=4.6.0",
+    "xgboost>=3.0.0",
+    "jupyterlab>=4.4.0",
+    "ipykernel>=6.29.0",
+]
+dev = ["pytest>=8.0.0"]
+all = ["DiscoveryAgent[acs,opentargets,analysis]"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["DiscoveryAgent", "acs_agent"]
+
+[tool.uv.sources]
+DiscoveryAgent = { path = ".", editable = true }

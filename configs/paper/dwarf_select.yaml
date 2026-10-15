@@ -1,0 +1,44 @@
+# dwarf_select: launch settings for the dwarf-galaxy campaign.
+# Pass --task_description_file, --background_path and your own data paths on the command line.
+
+allow_director_to_stop: true
+analysis_name: "dwarf_select"
+claude_md_generator: false
+compaction_trigger_tokens: 150000
+director_model: "claude-opus-4-6"
+enable_compaction: true
+execution_max_turns: 60
+execution_model: "claude-opus-4-6"
+expanding_dataset: false
+expanding_dataset_dir: "data/downloads"
+generate_background_report: true
+generate_plan: true
+git_tracking: true
+hold_reviews_in_exploratory_phase: true
+human_selection: true
+hypothesis_model: "claude-opus-4-6"
+log_execution_agent: true
+memory_llm_model: "claude-opus-4-6"
+no_auto_hypothesis: true
+no_sandbox: false
+no_sandbox_enforcement: false
+num_branches: 1
+num_exploration_rounds: 1
+num_parallel_workflows: 1
+num_queries: 10
+num_rounds: 1
+omit_deepresearch: false
+omit_singlesearch: false
+opentargets_max_turns: 15
+opentargets_model: "claude-sonnet-4-6"
+review_design: true
+review_designer_model: "claude-opus-4-6"
+review_optimization_model: "claude-opus-4-6"
+review_optimization_steps: 3
+review_search: true
+single_search_max_tokens: 1200
+single_search_model: "claude-opus-4-6"
+sub_agent_architecture: true
+use_census_agent: false
+use_opentargets_agent: false
+codebase_structure_prompt_path: "configs/workspace_base_early.txt"

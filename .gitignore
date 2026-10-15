@@ -1,0 +1,23 @@
+# Python build and runtime files
+__pycache__/
+*.py[oc]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# Local credentials and editor state
+.env
+.DS_Store
+.vscode/
+.cursor/
+.claude/
+
+# Runtime workspaces and outputs
+LOGS/
+logs/
+data/
+node_modules/
+

@@ -1,0 +1,38 @@
+# starembed_auto: launch settings for the StarEmbed campaign.
+# Pass your own data paths on the command line.
+
+allow_director_to_stop: true
+analysis_name: "starembed_auto"
+claude_md_generator: false
+director_model: "claude-opus-4-6"
+enable_compaction: true
+execution_max_turns: 50
+execution_model: "claude-sonnet-4-5-20250929"
+expanding_dataset: false
+expanding_dataset_dir: "data/downloads"
+generate_background_report: true
+generate_plan: true
+git_tracking: true
+hold_reviews_in_exploratory_phase: true
+human_selection: false
+hypothesis_model: "claude-opus-4-6"
+memory_llm_model: "claude-opus-4-6"
+no_auto_hypothesis: false
+no_sandbox: false
+num_branches: 1
+num_exploration_rounds: 1
+num_parallel_workflows: 1
+num_queries: 10
+num_rounds: 1
+omit_deepresearch: false
+omit_singlesearch: false
+opentargets_model: "claude-sonnet-4-20250514"
+review_design: true
+review_designer_model: "claude-opus-4-6"
+review_optimization_model: "claude-opus-4-6"
+review_optimization_steps: 3
+review_search: true
+single_search_max_tokens: 1200
+sub_agent_architecture: true
+use_opentargets_agent: false
+codebase_structure_prompt_path: "configs/workspace_base_early.txt"

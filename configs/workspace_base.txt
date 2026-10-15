@@ -1,0 +1,21 @@
+{datapath}/
+├── data/                    # Data goes here; some data already initialized will be in here that you should use
+│   ├── external/            # Data from third-party sources (APIs, web scraping)
+│   ├── interim/             # Intermediate data (cleaned, transformed)
+│   └── processed/           # Final, canonical data sets for modeling
+├── data/                    # Location of raw data. DO NOT EDIT OR ADD ANYTHING TO IT
+├── experiments/             # Scripts and notebooks for EDA, experimentation, and analysis
+|   ├── scripts/             # Experimentation scripts; put all intermediate experiments here
+|   └── notebooks/           # Jupyter notebooks for EDA and experimentation
+├── src/                     # Source code for scripts and modules
+│   ├── __init__.py          # Makes 'src' a Python package
+│   ├── data/                # Scripts to download or generate data
+│   ├── features/            # Scripts to turn raw data into features
+│   ├── models/              # Scripts for training and deploying models
+│   └── visualization/       # Scripts to create visualizations
+├── models/                  # Trained and serialized models, model predictions
+├── reports/                 # Generated analysis reports and figures
+│   ├── figures/             # Figures and plots saved for the report
+│   └── analysis_outputs/    # Example final report
+├── DOCUMENTATION.md         # Detailed project documentation
+└── README.md                # Short and sweet overview of the project, key features, etc.
