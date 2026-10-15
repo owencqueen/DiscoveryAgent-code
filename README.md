@@ -15,7 +15,8 @@ or the scientist steering web application (see [What is not included](#what-is-n
 
 > **This is research code.** It is a raw representation of the agent as it was
 > implemented for the paper, kept close to the original so the methods can be
-> inspected and rerun. For a production version of the agent that is easy to
+> inspected and rerun for reproducibility. Coding agents supported in cleaning up this repository.
+> For a production version of the agent that is easy to
 > install and use, see the DiscoveryAgent App: **[link to come]**.
 
 ## How it works
@@ -120,7 +121,7 @@ used one, and the others put the task in the README.
 All runs go through one launcher, `scripts/run.py`. Run it from the
 repository root.
 
-### Smoke run
+### Test run
 
 Start from a paper configuration and shrink the budget with command-line
 flags, which always override the YAML:
@@ -240,36 +241,6 @@ have, both on by default:
 Pass `--no-sandbox-enforcement` and `--no-url-blocker` to run as the paper
 campaigns did. None of this replaces a container (see
 [Run inside a container](#run-inside-a-container)).
-
-## Differences from the paper's runs
-
-The prompts in this code match those of the DMS-Auto and Dwarf campaigns. The
-code was updated while the campaigns were running, so the earlier campaigns
-used slightly different director prompt text:
-
-- StarEmbed and ACS lack one director rule ("You may only submit one query to
-  one of the helper agents per step…").
-- StarEmbed used a shorter description of the execution agent.
-- Four campaigns did not repeat the stop reminder in the director's first
-  message.
-
-Other differences:
-
-- The two [execution safeguards](#execution-safeguards) were added after the
-  paper.
-- New runs name query folders `query_01` instead of `query_001`; resuming an
-  older checkpoint reads both.
-- The pinned dependencies in `uv.lock` are a current environment, not a frozen
-  copy of the cluster environment.
-
-## What is not included
-
-- Datasets, API credentials, the HPC container image and Slurm environment.
-- Code, models and reports the execution agent produced during the campaigns.
-- The scientist steering web application (see above for the file-based
-  equivalent).
-- Domain resources: Open Targets data and its loader package, the Dwarf
-  background PDFs, and the BioMCP skill used in GW-CD4.
 
 ## Repository map
 
