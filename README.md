@@ -319,3 +319,13 @@ difference from what the paper describes.
 
 MIT (`LICENSE`). The bundled Census helper keeps its own MIT license in
 `acs_agent/LICENSE`.
+
+## Citation
+
+```bibtex
+@misc{queen2026discoveryagent,
+  title = {{DiscoveryAgent}: A Framework for Scientist-centric Agentic AI},
+  author = {Queen, Owen and Ciuc\u{a}, Ioana and Dann, Emma and Somalwar, Jean and You, Carine and Dillmann, Steven and Manwadkar, Viraj and Gorrell, Evan and Zhang, Harrison G. and Pritchard, Jonathan and Wechsler, Risa and Zou, James},
+  year = {2026}
+}
+```
