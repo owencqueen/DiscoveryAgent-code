@@ -12,13 +12,10 @@ This repository releases the **core agent code** used in the paper's six
 campaigns, together with each campaign's launch configuration. It does not
 contain the datasets, the code the execution agent wrote during the campaigns,
 or the hypothesis-steering web application (see [What is not included](#what-is-not-included)).
-
-This is research code. Coding agents assisted with repository preparation.
-
-This is the core-method release. It does not reproduce the paper's benchmark
-scores, case-study figures, or audit experiments by itself. Selected case-study
-analysis code is maintained in the companion
+Case-study analysis code shown in the manuscript is maintained in the companion
 [reproduction repository](https://github.com/owencqueen/DiscoveryAgent-reproduction).
+
+Coding agents assisted with repository preparation.
 
 ## How it works
 
