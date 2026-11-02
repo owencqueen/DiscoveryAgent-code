@@ -1,4 +1,4 @@
-# Multi-agent pipeline for ClaudeCode execution
+# Execution and documentation sub-agents
 # Defines specialized agents for code execution, documentation, and CLAUDE.md maintenance
 
 from claude_agent_sdk import AgentDefinition
@@ -75,7 +75,3 @@ Always save your outputs to files so they can be reviewed.""",
         model="inherit"
     )
 }
-
-# Legacy documentation_agents for backward compatibility
-# This can be removed if not used elsewhere in the codebase
-

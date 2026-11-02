@@ -11,13 +11,14 @@ the hypothesis for each round.
 This repository releases the **core agent code** used in the paper's six
 campaigns, together with each campaign's launch configuration. It does not
 contain the datasets, the code the execution agent wrote during the campaigns,
-or the scientist steering web application (see [What is not included](#what-is-not-included)).
+or the hypothesis-steering web application (see [What is not included](#what-is-not-included)).
 
-> **This is research code.** It is a raw representation of the agent as it was
-> implemented for the paper, kept close to the original so the methods can be
-> inspected and rerun for reproducibility. Coding agents supported in cleaning up this repository.
-> For a production version of the agent that is easy to
-> install and use, see the DiscoveryAgent App: **[link to come]**.
+This is research code. Coding agents assisted with repository preparation.
+
+This is the core-method release. It does not reproduce the paper's benchmark
+scores, case-study figures, or audit experiments by itself. Selected case-study
+analysis code is maintained in the companion
+[reproduction repository](https://github.com/owencqueen/DiscoveryAgent-reproduction).
 
 ## How it works
 
@@ -29,7 +30,7 @@ or the scientist steering web application (see [What is not included](#what-is-n
    director sends one query to one tool agent, reads its report, and either
    continues or stops before the query budget runs out.
 3. **Tool agents** (`DiscoveryAgent/tool_agents/`):
-   - `execution_agent`: a Claude Code agent (via the Claude Agent SDK) that works
+   - `execution_agent`: an execution agent built with the Claude Agent SDK that works
      in a sandboxed copy of your dataset directory, with documentation
      sub-agents.
    - `web_search`: Anthropic web search, at most three searches per call.
@@ -54,7 +55,7 @@ or the scientist steering web application (see [What is not included](#what-is-n
   Targets data for the functional-genomics agent.
 
 Runs make many model calls and can take hours. A paper campaign round costs
-real API credit, so start with the small smoke run below.
+real API credit, so start with the small test run below.
 
 ### Run inside a container
 
@@ -114,7 +115,8 @@ The agent reads `README.txt` as its dataset description. Write `{datapath}`
 wherever the absolute path of the data should go; the launcher fills it in with
 the sandbox's data path. A separate research brief can be passed with
 `--task_description_file`; the paper's economics, GW-CD4 and Dwarf campaigns
-used one, and the others put the task in the README.
+used one. The DMS instructions were embedded in the dataset README; StarEmbed
+received no separate task prompt.
 
 ## Run the agent
 
@@ -140,9 +142,11 @@ scientist input.
 
 ### Paper campaign configurations
 
-`configs/paper/` has one launch file per paper campaign. Each records that
-campaign's models, query budget, turn caps, review settings, memory, compaction
-and workspace specification. Pass your own data paths on the command line.
+`configs/paper/` has one launch file per paper campaign. These are starting
+configurations for the campaign protocols, not a manifest of every invocation.
+Models, budgets, and enabled features can vary between
+rounds; see the manuscript supplement for those settings. Pass your own data
+paths on the command line.
 
 | Config | Campaign | Mode | Extra flags needed |
 |---|---|---|---|
@@ -153,24 +157,44 @@ and workspace specification. Pass your own data paths on the command line.
 | `acs_select.yaml` | Economics (American Community Survey) | Scientist selection | `--task_description_file`; `--extra acs` installed |
 | `gw_cd4_select.yaml` | GW-CD4 perturbation case study | Scientist selection | `--task_description_file`, `--opentargets_data_path`, `--opentargets_mcp_package_path`; `--extra opentargets` installed |
 
-To run your own data with a campaign's settings:
+For data prepared in the GW-CD4 format:
 
 ```bash
 .venv/bin/python -m scripts.run \
   --config-yaml configs/paper/gw_cd4_select.yaml \
   --working_directory "$DATA_PATH/my_dataset" \
-  --task_description_file /path/to/TASK_DESCRIPTION.md \
+  --readme-path inputs/gw_cd4_select/README.txt \
+  --task_description_file "$PWD/inputs/gw_cd4_select/TASK_DESCRIPTION.md" \
   --opentargets_data_path /path/to/opentargets_parquet \
   --opentargets_mcp_package_path /path/to/virtualbiotech_mcp_package
 ```
 
-The datasets and the dataset and task descriptions for each campaign are not
-included in this repository.
+The original dataset descriptions are in `inputs/<config-name>/README.txt`.
+Separate task briefs are included only for Dwarf, ACS, and GW-CD4. These are
+inputs supplied to the workflow, not generated reports. Use `--readme-path`
+and an absolute `--task_description_file` path to supply them. Datasets and
+preprocessing pipelines are not bundled; the descriptions specify the expected
+files but are not download or preprocessing scripts.
+
+Inspect a campaign without credentials or API calls:
+
+```bash
+.venv/bin/python -m scripts.plan dms_auto --working-directory /path/to/dataset
+```
+
+This prints the launch command, configuration, dataset description, and task
+brief. It does not create a workspace. API messages that depend on generated
+hypotheses, literature searches, or prior rounds are constructed during a run.
+
+`dms_auto.yaml` enables automatic hypothesis generation in this launcher.
+The retained initial checkpoint has selection flags enabled despite the
+campaign being reported as automatic; the release configuration follows the
+paper's automatic protocol. It is not a byte-for-byte checkpoint export.
 
 ### Scientist-selected hypotheses
 
-Configs with `human_selection: true` run one round per invocation and then
-stop. Between rounds:
+The supplied steering configs set `human_selection: true` and `num_rounds: 1`
+to run one round per invocation. Between rounds:
 
 1. Read the round's outputs under `$DATA_PATH/LOGS/<dataset>/<run>/checkpoints/round_N/`.
 2. Write the hypothesis to test next, in plain Markdown, to
@@ -178,7 +202,7 @@ stop. Between rounds:
 3. Resume from that round's config (below). Round N+1 picks up the file
    automatically.
 
-To set the hypothesis for the first round, pass `--selected_hypothesis_file`.
+To set the hypothesis for the first round, pass `--selected-hypothesis-file`.
 The paper used a separate web application to draft and edit candidate
 hypotheses; writing the file by hand is equivalent for the agent.
 
@@ -230,23 +254,39 @@ Run `.venv/bin/python -m scripts.run --help` for the full list.
 The execution agent works in a per-run workspace inside the dataset directory.
 The files present when it starts are recorded, and the run reports any that
 go missing. The Open Targets agent's write protection keeps it out of the
-source data. This release adds two safeguards the paper campaigns did not
-have, both on by default:
+source data. Two additional safeguards are enabled by default:
 
-- **Sandbox path enforcement** blocks file access outside the run's workspace
-  and adds a short note about this to the execution agent's prompt.
-- **A URL blocker** denies downloads from ProteinGym test-label sources, which
-  would leak held-out labels in the DMS benchmark.
+- **Sandbox path enforcement** screens direct file access and common shell
+  commands against the workspace and read allow-list.
+- **A URL blocker** denies known ProteinGym test-label sources.
 
-Pass `--no-sandbox-enforcement` and `--no-url-blocker` to run as the paper
-campaigns did. None of this replaces a container (see
-[Run inside a container](#run-inside-a-container)).
+The manuscript supplement describes the containment hooks, their hardening,
+and the URL blocker's use in the reported campaigns. Disabling these hooks
+does not reconstruct the paper's execution environment. They supplement the
+container isolation described above.
+
+## Reproducibility limits
+
+The shared prompt implementation is not an exact prompt snapshot for every
+campaign. Director wording differed across campaigns. Dependency versions in
+`uv.lock` specify the release environment, not the original cluster environment.
+Model sampling, external search results, and provider changes can also change
+outputs; the release does not promise identical generated analyses or scores.
+
+## What is not included
+
+- Datasets, API credentials, the HPC container image and Slurm environment.
+- Code, models and reports the execution agent produced during the campaigns.
+- The scientist steering web application (see above for the file-based
+  equivalent).
+- Domain resources: Open Targets data and its loader package, the Dwarf
+  background PDFs, and the BioMCP skill used in GW-CD4.
 
 ## Repository map
 
 | Path | Contents |
 |---|---|
-| `DiscoveryAgent/hypothesis_brancher.py` | Rounds, scientist-selection handoff, memory integration |
+| `DiscoveryAgent/hypothesis_brancher.py` | Rounds, hypothesis selection, memory integration |
 | `DiscoveryAgent/director_workflow.py` | Director loop, tool dispatch, review, reports |
 | `DiscoveryAgent/hyp_agents/` | Director and hypothesis-generation agents |
 | `DiscoveryAgent/tool_agents/` | Execution, web search, deep research, Census, Open Targets agents; `security/` safeguards |
@@ -258,7 +298,8 @@ campaigns did. None of this replaces a container (see
 | `acs_agent/` | Bundled Census/PUMS/IPUMS helper used by the economics agent |
 | `configs/paper/` | Launch configurations of the six paper campaigns |
 | `configs/workspace_*.txt` | Workspace layouts given to the execution agent |
-| `guides/` | Notes on expanding-dataset mode |
+| `inputs/` | Dataset descriptions and task briefs supplied to the six campaigns |
+| `guides/` | Usage of expanding-dataset mode |
 | `tests/` | Tests for the released code |
 
 ## Tests
@@ -268,12 +309,13 @@ bash setup/setup.sh --extra dev
 .venv/bin/python -m pytest
 ```
 
-The tests make no API calls.
+The default tests make no API calls. Four live sandbox tests require an
+explicit `RUN_LIVE_SANDBOX_TESTS=1` opt-in and an authenticated CLI.
 
 ## Issues
 
 Please report problems with the codebase in this repository's
-[Issues](../../issues), for example a missing file, a step that fails, or a
+[Issues](https://github.com/owencqueen/DiscoveryAgent-code/issues), for example a missing file, a step that fails, or a
 difference from what the paper describes.
 
 ## License

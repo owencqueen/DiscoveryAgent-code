@@ -1,0 +1,2 @@
+Your task is to predict galaxy redshift (distance) directly from resolved imaging (photometric redshift estimation, focused on low redshift (z < 0.03) where morphology/size/structure carry distance information beyond integrated magnitudes/colors).
+DO NOT use any metadata that is provided in the data, only the images.

@@ -299,9 +299,22 @@ def normalize_init_code_dir_list(value):
         return [str(entry) for entry in value]
     return [str(value)]
 
-def main(args):
+def validate_run_environment(args):
+    """Check credentials before creating a workspace or writing run artifacts."""
+    required = ["ANTHROPIC_API_KEY"]
+    if not args.omit_deepresearch or (args.generate_background_report and not args.background_path):
+        required.append("PERPLEXITY_API_KEY")
+    missing = [name for name in required
+               if not os.environ.get(name, "").strip()
+               or os.environ[name].strip() in {"replace_with_your_key", "..."}]
+    if missing:
+        raise ValueError("Set " + ", ".join(missing) + " before starting a run")
     if not DATA_DIR:
         raise ValueError("Set DATA_PATH to the directory for run logs and datasets")
+
+
+def main(args):
+    validate_run_environment(args)
 
     # Generate timestamp for this run (used for sandbox and logs)
     run_datetime = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -438,7 +451,7 @@ def main(args):
 
         # Structure: /path/to/dataset/{analysis_name}_{timestamp}/
         sandbox_dir = os.path.join(
-            args.working_directory,  # Dataset directory (e.g., /scratch/.../ad_sandbox_data)
+            args.working_directory,  # Dataset directory
             f"{args.analysis_name}_{run_datetime}"  # Timestamped run folder
         )
 
@@ -753,7 +766,7 @@ def main(args):
                     print(f"   {checkpoint_dir}")
                     print(f"   • Candidates: {Path(candidates_path).name}")
                     print(f"   • Config: config.json")
-                    print(f"   • Use: python scripts/show_hypothesis_choice.py {checkpoint_dir}")
+                    print(f"   • Write the next hypothesis to: {checkpoint_dir / 'selected_hypothesis.md'}")
 
     # Get and display final report paths
     report_paths = brancher.get_final_report_paths()
@@ -851,6 +864,11 @@ if __name__ == "__main__":
     # Validation: analysis_name is required
     if not args.analysis_name:
         parser.error("--analysis_name is required (provide via command line or --config-file)")
+
+    try:
+        validate_run_environment(args)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     # Auto-detect existing codebase on resumption
     # If loading from config, use working_directory as existing_codebase (unless explicitly overridden)

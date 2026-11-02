@@ -92,7 +92,7 @@ class HypothesisBrancher:
         Args:
             workflow_config: Configuration for the DirectorWorkflow instances
             num_rounds: Number of rounds to run
-            num_parallel_workflows: Number of parallel workflows (not yet implemented)
+            num_parallel_workflows: Number of workflows; only 1 is supported
             num_branches: Number of branches per round (default: 1)
             num_exploration_rounds: Number of exploration rounds (optional)
                           If False, uses simple (1-agent) mode for faster operation.

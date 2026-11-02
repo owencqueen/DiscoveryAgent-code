@@ -15,11 +15,11 @@ generate_background_report: true
 generate_plan: true
 git_tracking: true
 hold_reviews_in_exploratory_phase: true
-human_selection: true
+human_selection: false
 hypothesis_model: "claude-opus-4-6"
 log_execution_agent: true
 memory_llm_model: "claude-opus-4-6"
-no_auto_hypothesis: true
+no_auto_hypothesis: false
 no_sandbox: false
 num_branches: 1
 num_exploration_rounds: 1

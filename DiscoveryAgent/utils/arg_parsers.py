@@ -51,7 +51,7 @@ def create_run_parser():
     parser.add_argument("--num_branches", type=int, default=1,
                         help="Number of parallel branches per round (default: 1)")
     parser.add_argument("--num_parallel_workflows", type=int, default=1,
-                        help="Number of workflows to run in parallel (default: 1, parallel not yet implemented)")
+                        help="Number of workflows (only 1 is supported)")
     parser.add_argument("--num_exploration_rounds", type=int, default=None,
                         help="Number of exploration rounds (default: None)")
 
