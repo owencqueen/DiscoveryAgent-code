@@ -1,8 +1,9 @@
 # DiscoveryAgent
 
-DiscoveryAgent is the research-agent framework described in the accompanying
-manuscript. Given a dataset and a short description of it, the agent runs
-rounds of computational research: a director agent plans each step and sends
+DiscoveryAgent is the research-agent framework described in the
+[DiscoveryAgent paper](https://arxiv.org/abs/2611.21950). Given a dataset and a
+short description of it, the agent runs rounds of computational research: a
+director agent plans each step and sends
 queries to tool agents that write and run code, search the web, and review the
 literature, while a reviewer critiques the work and an empirical memory carries
 findings from round to round. Rounds run automatically, or a scientist chooses
@@ -326,6 +327,7 @@ MIT (`LICENSE`). The bundled Census helper keeps its own MIT license in
 @misc{queen2026discoveryagent,
   title = {{DiscoveryAgent}: A Framework for Scientist-centric Agentic AI},
   author = {Queen, Owen and Ciuc\u{a}, Ioana and Dann, Emma and Somalwar, Jean and You, Carine and Dillmann, Steven and Manwadkar, Viraj and Gorrell, Evan and Zhang, Harrison G. and Pritchard, Jonathan and Wechsler, Risa and Zou, James},
-  year = {2026}
+  year = {2026},
+  url = {https://arxiv.org/abs/2611.21950}
 }
 ```
