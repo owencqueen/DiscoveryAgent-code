@@ -24,6 +24,15 @@ Guidelines: Use for comprehensive literature analyses and massive search of reso
 Output: A report that synthesizes literature and research based on your query.
 """
 
+VALENCY_AGENT_TAG = "valency_agent"
+VALENCY_AGENT_PROMPT = """
+Description: A scholarly literature agent powered by Valency Bond (mcp.valency.io) that searches 44M+ scientific preprints and peer-reviewed papers.
+Guidelines: Use for precise academic citations, citation-graph traversal, and tracking recent preprints.
+    - Useful for investigating methodology, finding related prior works, and resolving literature contradictions.
+    - Queries return source-linked, verifiable papers with titles, authors, and DOIs/arXiv IDs.
+Output: A source-grounded academic literature synthesis report with full bibliographic metadata.
+"""
+
 EXECUTION_AGENT_TAG = "execution_agent"
 EXECUTION_AGENT_PROMPT = """
 Description: An agent that is able to execute your queries through code and experimentation on the dataset.

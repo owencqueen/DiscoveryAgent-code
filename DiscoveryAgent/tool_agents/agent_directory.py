@@ -6,6 +6,7 @@ _AGENT_CLASS_PATHS = {
     "execution_agent": "DiscoveryAgent.tool_agents.execution_agent_cc:ExecutionAgentCC",
     "web_search": "DiscoveryAgent.tool_agents.single_search:SingleSearchAgent",
     "deep_research": "DiscoveryAgent.tool_agents.deep_research:DeepResearchAgent",
+    "valency_agent": "DiscoveryAgent.tool_agents.valency_agent:ValencyScholarlyAgent",
     "census_data_agent": "DiscoveryAgent.tool_agents.specialized.census_agent:CensusDataAgent",
     "opentargets_agent": "DiscoveryAgent.tool_agents.specialized.opentargets_agent:OpenTargetsAgent",
 }
